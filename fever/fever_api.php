@@ -758,7 +758,7 @@ class FeverAPI extends Handler {
 							(SELECT id FROM
 								(SELECT id FROM ttrss_entries, ttrss_user_entries WHERE ref_id = id
 									AND owner_uid = '" . db_escape_string($_SESSION["uid"]) . "' AND unread = true AND feed_id IN
-										(SELECT id FROM ttrss_feeds WHERE cat_id IN (" . intval($id) . ")) AND date_entered < '" . date("Y-m-d H:i:s", $before) . "' ) as tmp)");
+										(SELECT id FROM ttrss_feeds WHERE cat_id IN (" . intval($id) . ")) AND updated < '" . date("Y-m-d H:i:s", $before) . "' ) as tmp)");
 
 				}
 				// this is "all" to fever, but internally "all" is -4
@@ -769,7 +769,7 @@ class FeverAPI extends Handler {
 							SET unread = false, last_read = NOW() WHERE ref_id IN
 								(SELECT id FROM
 									(SELECT id FROM ttrss_entries, ttrss_user_entries WHERE ref_id = id
-										AND owner_uid = '" . db_escape_string($_SESSION["uid"]) . "' AND unread = true AND date_entered < '" . date("Y-m-d H:i:s", $before) . "' ) as tmp)");
+										AND owner_uid = '" . db_escape_string($_SESSION["uid"]) . "' AND unread = true AND updated < '" . date("Y-m-d H:i:s", $before) . "' ) as tmp)");
 				}
 			}
 			// not a category
@@ -779,7 +779,7 @@ class FeverAPI extends Handler {
 					SET unread = false, last_read = NOW() WHERE ref_id IN
 						(SELECT id FROM
 							(SELECT id FROM ttrss_entries, ttrss_user_entries WHERE ref_id = id
-								AND owner_uid = '" . db_escape_string($_SESSION["uid"]) . "' AND unread = true AND feed_id = " . intval($id) . " AND date_entered < '" . date("Y-m-d H:i:s", $before) . "' ) as tmp)");
+								AND owner_uid = '" . db_escape_string($_SESSION["uid"]) . "' AND unread = true AND feed_id = " . intval($id) . " AND updated < '" . date("Y-m-d H:i:s", $before) . "' ) as tmp)");
 
 			}
 			ccache_update($id,$_SESSION["uid"], $cat);
