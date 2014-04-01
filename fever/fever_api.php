@@ -874,12 +874,10 @@ class FeverAPI extends Handler {
 	// validate the api_key, user preferences
 	function before($method) {
 		// Check for all client in Android except ReadKit in Mac, Mr. Reader and Dalvik
-		if (strpos($_SERVER['HTTP_USER_AGENT'],"Dalvik") !== false ||
-			strpos($_SERVER['HTTP_USER_AGENT'],"ReadKit") !== false ||
-			strpos($_SERVER['HTTP_USER_AGENT'],"Mr. Reader") !== false) {
-			$this->ID_HACK_FOR_MRREADER = 0;
+		if (strpos($_SERVER['HTTP_USER_AGENT'],"some weird client UA here") !== false) {
+			$this->ID_HACK_FOR_MRREADER = 1;
 		} else {
-			$this->ID_HACK_FOR_MRREADER = 1; // and readkit and dalvik...
+			$this->ID_HACK_FOR_MRREADER = 0;
 		}
 		if (parent::before($method)) {
 			if (self::DEBUG) {
