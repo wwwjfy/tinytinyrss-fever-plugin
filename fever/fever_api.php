@@ -836,31 +836,8 @@ class FeverAPI extends Handler {
 
         if (isset($_REQUEST["mark"], $_REQUEST["as"], $_REQUEST["id"]))
         {
-            if (is_numeric($_REQUEST["id"]))
-            {
-                $before    = (isset($_REQUEST["before"])) ? $_REQUEST["before"] : null;
-                if ($before > pow(10,10) ) {
-                    $before = round($before / 1000);
-                }
-                $method_name = "set" . ucfirst($_REQUEST["mark"]) . "As" . ucfirst($_REQUEST["as"]);
-
-                if (method_exists($this, $method_name))
-                {
-                    $id = intval($_REQUEST["id"]);
-                    $this->{$method_name}($id, $before);
-                    switch($_REQUEST["as"])
-                    {
-                        case "read":
-                        case "unread":
-                            $response_arr["unread_item_ids"] = $this->getUnreadItemIds();
-                        break;
-
-                        case 'saved':
-                        case 'unsaved':
-                            $response_arr["saved_item_ids"] = $this->getSavedItemIds();
-                        break;
-                    }
-                }
+            foreach (explode(",", $_REQUEST["id"]) as $id) {
+                $this->markIds($id);
             }
         }
 
@@ -869,6 +846,35 @@ class FeverAPI extends Handler {
         else if (!$_SESSION["uid"])
             $this->wrap(self::STATUS_ERR, NULL);
 
+    }
+
+    function markIds($id) {
+        if (is_numeric($id))
+        {
+            $before    = (isset($_REQUEST["before"])) ? $_REQUEST["before"] : null;
+            if ($before > pow(10,10) ) {
+                $before = round($before / 1000);
+            }
+            $method_name = "set" . ucfirst($_REQUEST["mark"]) . "As" . ucfirst($_REQUEST["as"]);
+
+            if (method_exists($this, $method_name))
+            {
+                $id = intval($_REQUEST["id"]);
+                $this->{$method_name}($id, $before);
+                switch($_REQUEST["as"])
+                {
+                    case "read":
+                    case "unread":
+                        $response_arr["unread_item_ids"] = $this->getUnreadItemIds();
+                    break;
+
+                    case 'saved':
+                    case 'unsaved':
+                        $response_arr["saved_item_ids"] = $this->getSavedItemIds();
+                    break;
+                }
+            }
+        }
     }
 
     // validate the api_key, user preferences
