@@ -837,7 +837,7 @@ class FeverAPI extends Handler {
         if (isset($_REQUEST["mark"], $_REQUEST["as"], $_REQUEST["id"]))
         {
             foreach (explode(",", $_REQUEST["id"]) as $id) {
-                $this->markIds($id);
+                $this->markId($id);
             }
         }
 
@@ -848,7 +848,7 @@ class FeverAPI extends Handler {
 
     }
 
-    function markIds($id) {
+    function markId($id) {
         if (is_numeric($id))
         {
             $before    = (isset($_REQUEST["before"])) ? $_REQUEST["before"] : null;
@@ -859,8 +859,7 @@ class FeverAPI extends Handler {
 
             if (method_exists($this, $method_name))
             {
-                $id = intval($_REQUEST["id"]);
-                $this->{$method_name}($id, $before);
+                $this->{$method_name}(intval($id), $before);
                 switch($_REQUEST["as"])
                 {
                     case "read":
